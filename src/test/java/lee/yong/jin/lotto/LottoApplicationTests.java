@@ -101,11 +101,12 @@ class LottoApplicationTests {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	List<Map> loadExcel() {
 		List<Map> dataList = new ArrayList<Map>();
 
 		try {
-			FileInputStream file = new FileInputStream("D:/Private/lotto_numbers.xlsx");
+			FileInputStream file = new FileInputStream("C:\\Users\\jnj45\\OneDrive\\문서\\lotto_numbers.xlsx");
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
 
 			int rowindex=0;
