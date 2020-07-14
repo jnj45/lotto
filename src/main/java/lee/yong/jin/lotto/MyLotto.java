@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -24,8 +25,28 @@ public class MyLotto {
 		}*/
 
 		//System.out.println(checkExistAll("2,13,34"));
-		genNumber();
-
+		//genNumber();
+		
+		//1,11,17,27,35,39
+		for (Map data: dataList) {
+			String result = checkSame(
+					MapUtils.getIntValue(data, "번호1"),
+					MapUtils.getIntValue(data, "번호2"),
+					MapUtils.getIntValue(data, "번호3"),
+					MapUtils.getIntValue(data, "번호4"),
+					MapUtils.getIntValue(data, "번호5"),
+					MapUtils.getIntValue(data, "번호6"),
+					5);
+			if (StringUtils.isNotEmpty(result)) {
+				System.out.println("중복된회자=[" + MapUtils.getString(data, "회차") + "]=========================" + result);
+			}
+		}
+//		System.out.println(checkThreeSame(7, 9, 16, 21, 39, 41));
+//		System.out.println(checkThreeSame(15, 18, 30, 38, 39, 45));
+//		System.out.println(checkThreeSame(1, 13, 15, 29, 30, 31));
+//		System.out.println(checkThreeSame(9, 10, 23, 34, 38, 44));
+//		System.out.println(checkThreeSame(6, 10, 25, 31, 37, 45));
+//		System.out.println(checkThreeSame(8, 16, 17, 30, 35, 39));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -33,7 +54,7 @@ public class MyLotto {
 		List<Map> dataList = new ArrayList<Map>();
 
 		try {
-			FileInputStream file = new FileInputStream("C:\\Users\\jnj45\\OneDrive\\문서\\lotto_excel.xlsx");
+			FileInputStream file = new FileInputStream("C:\\Users\\jnj45\\OneDrive\\문서\\lotto_excel_2.xlsx");
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
 
 			int rowindex=0;
@@ -104,8 +125,8 @@ public class MyLotto {
 */
 		int no1 = 1; int no2 = 0;
 		while(isOk){
-			int a = RandomUtils.nextInt(1, 17);
-			int b = RandomUtils.nextInt(1, 17);
+			int a = RandomUtils.nextInt(1, 15);
+			int b = RandomUtils.nextInt(1, 15);
 			if (a < b){
 				no1 = a; no2 = b;
 			}else{
@@ -151,6 +172,8 @@ public class MyLotto {
 			isOk = checkExistAll(no4+","+no5+","+no6);
 		}
 		System.out.println("no6:"+no6);
+		
+		
 	}
 
 	static boolean checkExistRecent(int no, int src){
@@ -173,42 +196,88 @@ public class MyLotto {
 		}
 		return false;
 	}
+	
+	static String checkSame(int no1, int no2, int no3, int no4, int no5, int no6, int checkCnt) {
+		String result = "";
+		
+		int existCnt = 0;
+		for (Map data: dataList) {
+			
+			if ((no1+","+no2+","+no3+","+no4+","+no5+","+no6).equals(MapUtils.getString(data, "번호들"))) {
+				continue;
+			}
+			
+			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
+			
+			if (dataStr.indexOf(","+no1+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no2+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no3+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no4+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no5+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no6+",") > 0){
+				existCnt++;
+			}
+			//System.out.println(dataStr + " : 중복개수" + existCnt);
+			if (existCnt>=checkCnt) {
+				result += "\r\n체크번호=["+no1+","+no2+","+no3+","+no4+","+no5+","+no6+"]"
+						+ "중복회차="+MapUtils.getString(data, "회차") + ", 중복번호=" + MapUtils.getString(data, "번호들");
+				
+			}
+			existCnt = 0;
+		}
+		return result;
+	}
+	
+	static String checkThreeSame(int no1, int no2, int no3, int no4, int no5, int no6) {
+		String result = "";
+		
+		int existCnt = 0;
+		for (Map data: dataList) {
+			
+			if ((no1+","+no2+","+no3+","+no4+","+no5+","+no6).equals(MapUtils.getString(data, "번호들"))) {
+				continue;
+			}
+			
+			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
+			
+			if (dataStr.indexOf(","+no1+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no2+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no3+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no4+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no5+",") > 0){
+				existCnt++;
+			}
+			if (dataStr.indexOf(","+no6+",") > 0){
+				existCnt++;
+			}
+			//System.out.println(dataStr + " : 중복개수" + existCnt);
+			if (existCnt>=3) {
+				result += "\r\n체크번호=["+no1+","+no2+","+no3+","+no4+","+no5+","+no6+"]"
+						+ "중복회차="+MapUtils.getString(data, "회차") + ", 중복번호=" + MapUtils.getString(data, "번호들");
+				
+			}
+			existCnt = 0;
+		}
+		return result;
+	}
 
 }
-/*
 
-no1:4
-no2:16
-no3:19
-no4:24
-no5:29
-no6:41
-
-no1:15
-no2:18
-no3:30
-no4:38
-no5:42
-no6:44
-
-no1:6
-no2:13
-no3:15
-no4:29
-no5:33
-no6:42
-
-no1:9
-no2:10
-no3:23
-no4:34
-no5:38
-no6:44
-
-no1:6
-no2:15
-no3:20
-no4:32
-no5:34
-no6:35
- * */
