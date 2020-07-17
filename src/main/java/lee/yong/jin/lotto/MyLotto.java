@@ -28,24 +28,28 @@ public class MyLotto {
 		//genNumber();
 		
 		//1,11,17,27,35,39
-		for (Map data: dataList) {
-			String result = checkSame(
-					MapUtils.getIntValue(data, "번호1"),
-					MapUtils.getIntValue(data, "번호2"),
-					MapUtils.getIntValue(data, "번호3"),
-					MapUtils.getIntValue(data, "번호4"),
-					MapUtils.getIntValue(data, "번호5"),
-					MapUtils.getIntValue(data, "번호6"),
-					5);
-			if (StringUtils.isNotEmpty(result)) {
-				System.out.println("중복된회자=[" + MapUtils.getString(data, "회차") + "]=========================" + result);
-			}
-		}
-//		System.out.println(checkThreeSame(7, 9, 16, 21, 39, 41));
-//		System.out.println(checkThreeSame(15, 18, 30, 38, 39, 45));
-//		System.out.println(checkThreeSame(1, 13, 15, 29, 30, 31));
-//		System.out.println(checkThreeSame(9, 10, 23, 34, 38, 44));
-//		System.out.println(checkThreeSame(6, 10, 25, 31, 37, 45));
+//		for (Map data: dataList) {
+//			String result = checkSame(
+//					MapUtils.getIntValue(data, "번호1"),
+//					MapUtils.getIntValue(data, "번호2"),
+//					MapUtils.getIntValue(data, "번호3"),
+//					MapUtils.getIntValue(data, "번호4"),
+//					MapUtils.getIntValue(data, "번호5"),
+//					MapUtils.getIntValue(data, "번호6"),
+//					5);
+//			if (StringUtils.isNotEmpty(result)) {
+//				System.out.println("중복된회자=[" + MapUtils.getString(data, "회차") + "]=========================" + result);
+//			}
+//		}
+		//9,14,17,18,42,44
+		
+		  System.out.println(checkSame( 7, 9, 16, 21, 39, 41, 4));
+		  System.out.println(checkSame(15, 18, 30, 38, 39, 45, 4));
+		  System.out.println(checkSame( 1, 13, 15, 29, 30, 31, 4));
+		  System.out.println(checkSame( 6, 10, 25, 31, 37, 45, 4));
+		  System.out.println(checkSame( 1, 3, 26, 33, 35, 41, 3));
+		  
+		 
 //		System.out.println(checkThreeSame(8, 16, 17, 30, 35, 39));
 	}
 	
@@ -125,8 +129,8 @@ public class MyLotto {
 */
 		int no1 = 1; int no2 = 0;
 		while(isOk){
-			int a = RandomUtils.nextInt(1, 15);
-			int b = RandomUtils.nextInt(1, 15);
+			int a = RandomUtils.nextInt(0, 10);
+			int b = RandomUtils.nextInt(0, 15);
 			if (a < b){
 				no1 = a; no2 = b;
 			}else{
