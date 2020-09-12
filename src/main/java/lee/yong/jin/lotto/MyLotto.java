@@ -8,13 +8,13 @@ import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class MyLotto {
 	
+	@SuppressWarnings("rawtypes")
 	static List<Map> dataList;
 	
 	public static void main(String[] args) {
@@ -23,9 +23,9 @@ public class MyLotto {
 		/*for (Map data : dataList) {
 			System.out.println(data);
 		}*/
-
+		
 		//System.out.println(checkExistAll("2,13,34"));
-		//genNumber();
+		genNumber();
 		
 		//1,11,17,27,35,39
 //		for (Map data: dataList) {
@@ -41,19 +41,15 @@ public class MyLotto {
 //				System.out.println("중복된회자=[" + MapUtils.getString(data, "회차") + "]=========================" + result);
 //			}
 //		}
-		//9,14,17,18,42,44
 		
-		  System.out.println(checkSame( 7, 9, 16, 21, 39, 41, 4));
-		  System.out.println(checkSame(15, 18, 30, 38, 39, 45, 4));
-		  System.out.println(checkSame( 1, 13, 15, 29, 30, 31, 4));
-		  System.out.println(checkSame( 6, 10, 25, 31, 37, 45, 4));
-		  System.out.println(checkSame( 1, 3, 26, 33, 35, 41, 3));
-		  
-		 
-//		System.out.println(checkThreeSame(8, 16, 17, 30, 35, 39));
+//		  System.out.println(checkSame( 7, 9, 16, 21, 39, 41, 4));
+//		  System.out.println(checkSame(15, 18, 30, 38, 39, 45, 4));
+//		  System.out.println(checkSame( 1, 13, 15, 29, 30, 31, 4));
+//		  System.out.println(checkSame( 6, 10, 25, 31, 37, 45, 4));
+//		  System.out.println(checkSame( 1, 3, 26, 33, 35, 41, 3));
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 	static List<Map> loadExcel() {
 		List<Map> dataList = new ArrayList<Map>();
 
@@ -62,7 +58,6 @@ public class MyLotto {
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
 
 			int rowindex=0;
-			int columnindex=0;
 			//시트 수 (첫번째에만 존재하므로 0을 준다)
 			//만약 각 시트를 읽기위해서는 FOR문을 한번더 돌려준다
 			XSSFSheet sheet=workbook.getSheetAt(0);
@@ -94,7 +89,7 @@ public class MyLotto {
 									MapUtils.getIntValue(data, "번호4") +
 									MapUtils.getIntValue(data, "번호5") +
 									MapUtils.getIntValue(data, "번호6"));
-					System.out.println(data);
+					//System.out.println(data);
 					dataList.add(data);
 				}
 			}
@@ -129,14 +124,17 @@ public class MyLotto {
 */
 		int no1 = 1; int no2 = 0;
 		while(isOk){
-			int a = RandomUtils.nextInt(0, 10);
-			int b = RandomUtils.nextInt(0, 15);
+			int a = RandomUtils.nextInt(1, 25);
+			int b = RandomUtils.nextInt(1, 25);
+			if (a == b) {
+				continue;
+			}
 			if (a < b){
 				no1 = a; no2 = b;
 			}else{
 				no1 = b; no2 = a;
 			}
-			isOk = a==b;
+			isOk = checkExistRecent12(no1,no2,20);
 		}
 		System.out.println("no1:"+no1);
 		System.out.println("no2:"+no2);
@@ -145,7 +143,7 @@ public class MyLotto {
 		isOk = true;
 		int no3 = 0;
 		while(isOk){
-			no3 = RandomUtils.nextInt(no2+1, 30);
+			no3 = RandomUtils.nextInt(no2+1, 35);
 			isOk = checkExistAll(no1+","+no2+","+no3);
 		}
 		System.out.println("no3:"+no3);
@@ -154,7 +152,7 @@ public class MyLotto {
 		isOk = true;
 		int no4 = 0;
 		while(isOk){
-			no4 = RandomUtils.nextInt(no3+1, 37);
+			no4 = RandomUtils.nextInt(no3+1, 45);
 			isOk = checkExistAll(no2+","+no3+","+no4);
 		}
 		System.out.println("no4:"+no4);
@@ -176,7 +174,7 @@ public class MyLotto {
 			isOk = checkExistAll(no4+","+no5+","+no6);
 		}
 		System.out.println("no6:"+no6);
-		
+		System.out.println(no1+","+no2+","+no3+","+no4+","+no5+","+no6);
 		
 	}
 
@@ -185,6 +183,16 @@ public class MyLotto {
 		for(int i=0; i < recentIndex; i++){
 			Map data = dataList.get(i);
 			if (src == MapUtils.getIntValue(data, "번호"+no)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	static boolean checkExistRecent12(int no1, int no2, int cnt){
+		for(int i=0; i < cnt; i++){
+			Map data = dataList.get(i);
+			if ((no1+","+no2).equals(MapUtils.getIntValue(data, "번호1")+","+MapUtils.getIntValue(data, "번호2"))){
 				return true;
 			}
 		}
