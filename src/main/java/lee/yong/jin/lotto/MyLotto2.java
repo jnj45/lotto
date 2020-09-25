@@ -2,9 +2,11 @@ package lee.yong.jin.lotto;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -12,19 +14,18 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class MyLotto {
+public class MyLotto2 {
 	
 	@SuppressWarnings("rawtypes")
 	static List<Map> dataList;
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		dataList = loadExcel();
-		/*for (Map data : dataList) {
-			System.out.println(data);
-		}*/
 		
-		//System.out.println(checkExistAll("2,13,34"));
+		//int arr[] = {1,2,3,4,5,6};
+		//System.out.println(Arrays.asList(arr).contains(1));
+		//System.out.println(IntStream.of(arr).anyMatch(x -> x == 1));
+		
+		dataList = loadExcel();
 		genNumber();
 		
 		//1,11,17,27,35,39
@@ -49,133 +50,56 @@ public class MyLotto {
 //		  System.out.println(checkSame( 1, 3, 26, 33, 35, 41, 3));
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
-	static List<Map> loadExcel() {
-		List<Map> dataList = new ArrayList<Map>();
-
-		try {
-			FileInputStream file = new FileInputStream("C:\\Users\\jnj45\\OneDrive\\문서\\lotto_excel_2.xlsx");
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
-
-			int rowindex=0;
-			//시트 수 (첫번째에만 존재하므로 0을 준다)
-			//만약 각 시트를 읽기위해서는 FOR문을 한번더 돌려준다
-			XSSFSheet sheet=workbook.getSheetAt(0);
-			//행의 수
-			int rows=sheet.getPhysicalNumberOfRows();
-
-			for(rowindex=3;rowindex<rows;rowindex++){
-				//행을읽는다
-				XSSFRow row=sheet.getRow(rowindex);
-				if(row !=null){
-					Map data = new HashMap();
-					data.put("회차",  (int)row.getCell(1).getNumericCellValue());
-					data.put("번호1", (int)row.getCell(13).getNumericCellValue());
-					data.put("번호2", (int)row.getCell(14).getNumericCellValue());
-					data.put("번호3", (int)row.getCell(15).getNumericCellValue());
-					data.put("번호4", (int)row.getCell(16).getNumericCellValue());
-					data.put("번호5", (int)row.getCell(17).getNumericCellValue());
-					data.put("번호6", (int)row.getCell(18).getNumericCellValue());
-
-					data.put("번호들",   MapUtils.getIntValue(data, "번호1") + "," +
-										MapUtils.getIntValue(data, "번호2") + "," +
-										MapUtils.getIntValue(data, "번호3") + "," +
-										MapUtils.getIntValue(data, "번호4") + "," +
-										MapUtils.getIntValue(data, "번호5") + "," +
-										MapUtils.getIntValue(data, "번호6"));
-					data.put("총합", MapUtils.getIntValue(data, "번호1") +
-									MapUtils.getIntValue(data, "번호2") +
-									MapUtils.getIntValue(data, "번호3") +
-									MapUtils.getIntValue(data, "번호4") +
-									MapUtils.getIntValue(data, "번호5") +
-									MapUtils.getIntValue(data, "번호6"));
-					//System.out.println(data);
-					dataList.add(data);
-				}
-			}
-
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("총건수:" + dataList.size());
-		return dataList;
-	}
-	
 	static void genNumber() {
-		System.out.println("=========================================================================");
-		boolean isOk = true;
-		/*
-		//첫번째 번호
-		int no1 = 0;
-		while(isOk){
-			no1 = RandomUtils.nextInt(1, 15);
-			isOk = !checkExistRecent(1, no1);
-		}
-		System.out.println("no1:"+no1);
-
-		//2번째번호
-		isOk = true;
-		int no2 = 0;
-		while(isOk){
-			no2 = RandomUtils.nextInt(no1+1, 25);
-			isOk = !checkExistRecent(2, no2) && !checkExistAll(no1+","+no2);
-		}
-		System.out.println("no2:"+no2);
-*/
-		int no1 = 1; int no2 = 0;
-		while(isOk){
-			int a = RandomUtils.nextInt(1, 15);
-			int b = RandomUtils.nextInt(1, 20);
-			if (a == b) {
+		boolean isContinue = true;
+		
+				
+		while(isContinue){
+			int[] arr = new int[6];
+			
+			arr[0] = getNextRandomNumber(arr);
+			arr[1] = getNextRandomNumber(arr);
+			arr[2] = getNextRandomNumber(arr);
+			arr[3] = getNextRandomNumber(arr);
+			arr[4] = getNextRandomNumber(arr);
+			arr[5] = getNextRandomNumber(arr);
+			
+			Arrays.parallelSort(arr);
+			System.out.println(Arrays.toString(arr));
+			
+			if (checkExistAll(arr[0]+","+arr[1]+","+arr[2])) {
+				System.out.println("1,2,3 exsit");
 				continue;
 			}
-			if (a < b){
-				no1 = a; no2 = b;
-			}else{
-				no1 = b; no2 = a;
+			if (checkExistAll(arr[1]+","+arr[2]+","+arr[3])) {
+				System.out.println("2,3,4 exsit");
+				continue;
 			}
-			isOk = checkExistRecent12(no1,no2,30);
+			if (checkExistAll(arr[2]+","+arr[3]+","+arr[4])) {
+				System.out.println("3,4,5 exsit");
+				continue;
+			}
+			if (checkExistAll(arr[3]+","+arr[4]+","+arr[5])) {
+				System.out.println("4,5,6 exsit");
+				continue;
+			}
+			
+			isContinue = false;
 		}
-		System.out.println("no1:"+no1);
-		System.out.println("no2:"+no2);
-
-		//3번째번호
-		isOk = true;
-		int no3 = 0;
-		while(isOk){
-			no3 = RandomUtils.nextInt(no2+1, 30);
-			isOk = checkExistAll(no1+","+no2+","+no3);
+		System.out.println("end!");
+	}
+	
+	static int getNextRandomNumber(int[] arr) {
+		int result = 0;
+		while(true) {
+			final int i = RandomUtils.nextInt(1, 45);
+			//if (!Arrays.asList(arr).contains(i)) {
+			if (!IntStream.of(arr).anyMatch(x -> x == i)) {
+				result = i;
+				break;
+			}
 		}
-		System.out.println("no3:"+no3);
-
-		//4번째번호
-		isOk = true;
-		int no4 = 0;
-		while(isOk){
-			no4 = RandomUtils.nextInt(no3+1, 35);
-			isOk = checkExistAll(no2+","+no3+","+no4);
-		}
-		System.out.println("no4:"+no4);
-
-		//5번째번호
-		isOk = true;
-		int no5 = 0;
-		while(isOk){
-			no5 = RandomUtils.nextInt(no4+1, 35);
-			isOk = checkExistAll(no3+","+no4+","+no5);
-		}
-		System.out.println("no5:"+no5);
-
-		//6번째번호
-		isOk = true;
-		int no6 = 0;
-		while(isOk){
-			no6 = RandomUtils.nextInt(no5+1, 40);
-			isOk = checkExistAll(no4+","+no5+","+no6);
-		}
-		System.out.println("no6:"+no6);
-		System.out.println(no1+","+no2+","+no3+","+no4+","+no5+","+no6);
-		
+		return result;
 	}
 
 	static boolean checkExistRecent(int no, int src){
@@ -290,6 +214,59 @@ public class MyLotto {
 		}
 		return result;
 	}
+	
+	//문서 읽기
+	@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
+	static List<Map> loadExcel() {
+		List<Map> dataList = new ArrayList<Map>();
 
+		try {
+			FileInputStream file = new FileInputStream("C:\\Users\\jnj45\\OneDrive\\문서\\lotto_excel_2.xlsx");
+			XSSFWorkbook workbook = new XSSFWorkbook(file);
+
+			int rowindex=0;
+			//시트 수 (첫번째에만 존재하므로 0을 준다)
+			//만약 각 시트를 읽기위해서는 FOR문을 한번더 돌려준다
+			XSSFSheet sheet=workbook.getSheetAt(0);
+			//행의 수
+			int rows=sheet.getPhysicalNumberOfRows();
+
+			for(rowindex=3;rowindex<rows;rowindex++){
+				//행을읽는다
+				XSSFRow row=sheet.getRow(rowindex);
+				if(row !=null){
+					Map data = new HashMap();
+					data.put("회차",  (int)row.getCell(1).getNumericCellValue());
+					data.put("번호1", (int)row.getCell(13).getNumericCellValue());
+					data.put("번호2", (int)row.getCell(14).getNumericCellValue());
+					data.put("번호3", (int)row.getCell(15).getNumericCellValue());
+					data.put("번호4", (int)row.getCell(16).getNumericCellValue());
+					data.put("번호5", (int)row.getCell(17).getNumericCellValue());
+					data.put("번호6", (int)row.getCell(18).getNumericCellValue());
+
+					data.put("번호들",   MapUtils.getIntValue(data, "번호1") + "," +
+										MapUtils.getIntValue(data, "번호2") + "," +
+										MapUtils.getIntValue(data, "번호3") + "," +
+										MapUtils.getIntValue(data, "번호4") + "," +
+										MapUtils.getIntValue(data, "번호5") + "," +
+										MapUtils.getIntValue(data, "번호6"));
+					data.put("총합", MapUtils.getIntValue(data, "번호1") +
+									MapUtils.getIntValue(data, "번호2") +
+									MapUtils.getIntValue(data, "번호3") +
+									MapUtils.getIntValue(data, "번호4") +
+									MapUtils.getIntValue(data, "번호5") +
+									MapUtils.getIntValue(data, "번호6"));
+					//System.out.println(data);
+					dataList.add(data);
+				}
+			}
+
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("총건수:" + dataList.size());
+		return dataList;
+	}
+	
 }
 
