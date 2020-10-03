@@ -68,19 +68,19 @@ public class MyLotto2 {
 			System.out.println(Arrays.toString(arr));
 			
 			if (checkExistAll(arr[0]+","+arr[1]+","+arr[2])) {
-				System.out.println("1,2,3 exsit");
+				System.out.println(arr[0]+","+arr[1]+","+arr[2]+" exsit");
 				continue;
 			}
 			if (checkExistAll(arr[1]+","+arr[2]+","+arr[3])) {
-				System.out.println("2,3,4 exsit");
+				System.out.println(arr[1]+","+arr[2]+","+arr[3]+" exsit");
 				continue;
 			}
 			if (checkExistAll(arr[2]+","+arr[3]+","+arr[4])) {
-				System.out.println("3,4,5 exsit");
+				System.out.println(arr[2]+","+arr[3]+","+arr[4]+" exsit");
 				continue;
 			}
 			if (checkExistAll(arr[3]+","+arr[4]+","+arr[5])) {
-				System.out.println("4,5,6 exsit");
+				System.out.println(arr[3]+","+arr[4]+","+arr[5]+" exsit");
 				continue;
 			}
 			
