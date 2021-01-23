@@ -20,34 +20,36 @@ public class MyLotto2 {
 	static List<Map> dataList;
 	
 	public static void main(String[] args) {
-		
-		//int arr[] = {1,2,3,4,5,6};
-		//System.out.println(Arrays.asList(arr).contains(1));
-		//System.out.println(IntStream.of(arr).anyMatch(x -> x == 1));
-		
 		dataList = loadExcel();
+		System.out.println("1=========================================================================");
 		genNumber();
+		System.out.println("2=========================================================================");
+		genNumber();
+		System.out.println("3=========================================================================");
+		genNumber();
+		System.out.println("4=========================================================================");
+		genNumber();
+//		System.out.println("5=========================================================================");
+//		genNumber();
 		
-		//1,11,17,27,35,39
-//		for (Map data: dataList) {
-//			String result = checkSame(
-//					MapUtils.getIntValue(data, "번호1"),
-//					MapUtils.getIntValue(data, "번호2"),
-//					MapUtils.getIntValue(data, "번호3"),
-//					MapUtils.getIntValue(data, "번호4"),
-//					MapUtils.getIntValue(data, "번호5"),
-//					MapUtils.getIntValue(data, "번호6"),
-//					5);
-//			if (StringUtils.isNotEmpty(result)) {
-//				System.out.println("중복된회자=[" + MapUtils.getString(data, "회차") + "]=========================" + result);
-//			}
-//		}
+		/*
+		checkExistAllList("1,8,13");
+		checkExistAllList("8,13,36");
+		checkExistAllList("13,36,44");
+		checkExistAllList("36,44,45");
 		
-//		  System.out.println(checkSame( 7, 9, 16, 21, 39, 41, 4));
-//		  System.out.println(checkSame(15, 18, 30, 38, 39, 45, 4));
-//		  System.out.println(checkSame( 1, 13, 15, 29, 30, 31, 4));
-//		  System.out.println(checkSame( 6, 10, 25, 31, 37, 45, 4));
-//		  System.out.println(checkSame( 1, 3, 26, 33, 35, 41, 3));
+		checkExistAllList("1,8,13,36"); //1,8,13,36,44,45
+		checkExistAllList("8,13,36,44"); //10,12,18,35,42,43
+		checkExistAllList("13,36,44,45"); //10,12,18,35,42,43
+*/
+		
+		/*
+		[4, 5, 7, 31, 39, 44]
+		[2, 3, 20, 26, 31, 41]
+		[4, 9, 14, 33, 34, 41]
+		[1, 6, 16, 34, 38, 44]
+		[1, 13, 28, 30, 40, 43]
+		 */
 	}
 	
 	static void genNumber() {
@@ -59,6 +61,8 @@ public class MyLotto2 {
 			
 			arr[0] = getNextRandomNumber(arr);
 			arr[1] = getNextRandomNumber(arr);
+//			arr[0] = 4;
+//			arr[1] = 44;
 			arr[2] = getNextRandomNumber(arr);
 			arr[3] = getNextRandomNumber(arr);
 			arr[4] = getNextRandomNumber(arr);
@@ -67,20 +71,37 @@ public class MyLotto2 {
 			Arrays.parallelSort(arr);
 			System.out.println(Arrays.toString(arr));
 			
-			if (checkExistAll(arr[0]+","+arr[1]+","+arr[2])) {
+			int maxCheckCnt = 54;
+			int maxExistCnt = 1;
+			
+			if (checkExist(arr[0]+","+arr[1]+","+arr[2],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[0]+","+arr[1]+","+arr[2]+" exsit");
 				continue;
 			}
-			if (checkExistAll(arr[1]+","+arr[2]+","+arr[3])) {
+			if (checkExist(arr[1]+","+arr[2]+","+arr[3],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[1]+","+arr[2]+","+arr[3]+" exsit");
 				continue;
 			}
-			if (checkExistAll(arr[2]+","+arr[3]+","+arr[4])) {
+			if (checkExist(arr[2]+","+arr[3]+","+arr[4],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[2]+","+arr[3]+","+arr[4]+" exsit");
 				continue;
 			}
-			if (checkExistAll(arr[3]+","+arr[4]+","+arr[5])) {
+			if (checkExist(arr[3]+","+arr[4]+","+arr[5],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[3]+","+arr[4]+","+arr[5]+" exsit");
+				continue;
+			}
+			
+						
+			if (checkExistAll(arr[0]+","+arr[1]+","+arr[2]+","+arr[3])) {
+				System.out.println(arr[0]+","+arr[1]+","+arr[2]+","+arr[3]+" exist");
+				continue;
+			}
+			if (checkExistAll(arr[1]+","+arr[2]+","+arr[3]+","+arr[4])) {
+				System.out.println(arr[1]+","+arr[2]+","+arr[3]+","+arr[4]+" exist");
+				continue;
+			}
+			if (checkExistAll(arr[2]+","+arr[3]+","+arr[4]+","+arr[5])) {
+				System.out.println(arr[2]+","+arr[3]+","+arr[4]+","+arr[5]+" exist");
 				continue;
 			}
 			
@@ -127,10 +148,47 @@ public class MyLotto2 {
 		for (Map data: dataList) {
 			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
 			if (dataStr.indexOf(str) > 0){
+				System.out.println("exists===>"+dataStr);
 				return true;
 			}
 		}
 		return false;
+	}
+	//[6, 16, 17, 25, 31, 33]
+	//[4, 5, 7, 21, 26, 39]
+	//[3, 4, 12, 15, 23, 29]
+	//[5, 9, 15, 20, 38, 41]
+	//[2, 25, 31, 35, 39, 41]
+	static boolean checkExist(String str, int maxCheckCnt, int maxExistCnt){
+		int checkedCnt = 0;
+		int existCnt = 0;
+		
+		for (Map data: dataList) {
+			checkedCnt++;
+			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
+			if (dataStr.indexOf(str) > 0){
+				existCnt++;
+				if (checkedCnt < maxCheckCnt) {
+					System.out.println("checkdCnt["+checkedCnt+"] exists===>"+dataStr);
+					return true;
+				}else {
+					if (existCnt > maxExistCnt) {
+						System.out.println("existCnt["+existCnt+"] exists===>"+dataStr);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	static void checkExistAllList(String str){
+		for (Map data: dataList) {
+			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
+			if (dataStr.indexOf(str) > 0){
+				System.out.println(str + " exists===>"+MapUtils.getString(data, "회차") + "회차:" + dataStr);
+			}
+		}
 	}
 	
 	static String checkSame(int no1, int no2, int no3, int no4, int no5, int no6, int checkCnt) {
@@ -221,7 +279,7 @@ public class MyLotto2 {
 		List<Map> dataList = new ArrayList<Map>();
 
 		try {
-			FileInputStream file = new FileInputStream("C:\\Users\\jnj45\\OneDrive\\문서\\lotto_excel_2.xlsx");
+			FileInputStream file = new FileInputStream("C:\\Users\\jnj45\\OneDrive\\문서\\lotto_excel_3.xlsx");
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
 
 			int rowindex=0;
