@@ -10,6 +10,9 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.RegExUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.util.StringUtil;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -21,35 +24,42 @@ public class MyLotto2 {
 	
 	public static void main(String[] args) {
 		dataList = loadExcel();
-		System.out.println("1=========================================================================");
-		genNumber();
-		System.out.println("2=========================================================================");
-		genNumber();
-		System.out.println("3=========================================================================");
-		genNumber();
-		System.out.println("4=========================================================================");
-		genNumber();
+//		System.out.println("1=========================================================================");
+//		genNumber();
+//		System.out.println("2=========================================================================");
+//		genNumber();
+//		System.out.println("3=========================================================================");
+//		genNumber();
+//		System.out.println("4=========================================================================");
+//		genNumber();
 //		System.out.println("5=========================================================================");
 //		genNumber();
 		
-		/*
-		checkExistAllList("1,8,13");
-		checkExistAllList("8,13,36");
-		checkExistAllList("13,36,44");
-		checkExistAllList("36,44,45");
 		
-		checkExistAllList("1,8,13,36"); //1,8,13,36,44,45
-		checkExistAllList("8,13,36,44"); //10,12,18,35,42,43
-		checkExistAllList("13,36,44,45"); //10,12,18,35,42,43
-*/
+//		checkExistAllList("7, 9, 11,");
+//		checkExistAllList("12,13,16");
+//		checkExistAllList("13,16,17");
+//		checkExistAllList("16,17,39");
 		
-		/*
-		[4, 5, 7, 31, 39, 44]
-		[2, 3, 20, 26, 31, 41]
-		[4, 9, 14, 33, 34, 41]
-		[1, 6, 16, 34, 38, 44]
-		[1, 13, 28, 30, 40, 43]
-		 */
+//		checkExistAllList("1,8,13,36"); //1,8,13,36,44,45
+//		checkExistAllList("8,13,36,44"); //10,12,18,35,42,43
+//		checkExistAllList("13,36,44,45"); //10,12,18,35,42,43
+
+		
+/*
+[7, 9, 11, 13, 20, 21]
+[2, 6, 10, 15, 26, 29]
+[5, 6, 7, 14, 25, 31]
+[4, 5, 25, 30, 38, 40]
+[8, 12, 13, 16, 17, 39]
+ */
+		
+		checkExistPer3("7, 9, 11, 13, 20, 21");
+		checkExistPer3("2, 6, 10, 15, 26, 29");
+		checkExistPer3("5, 6, 7, 14, 25, 31");
+		checkExistPer3("4, 5, 25, 30, 38, 40");
+		checkExistPer3("8, 12, 13, 16, 17, 39");
+		
 	}
 	
 	static void genNumber() {
@@ -59,10 +69,10 @@ public class MyLotto2 {
 		while(isContinue){
 			int[] arr = new int[6];
 			
-			arr[0] = getNextRandomNumber(arr);
-			arr[1] = getNextRandomNumber(arr);
-//			arr[0] = 4;
-//			arr[1] = 44;
+//			arr[0] = getNextRandomNumber(arr);
+//			arr[1] = getNextRandomNumber(arr);
+			arr[0] = 12;
+			arr[1] = 17;
 			arr[2] = getNextRandomNumber(arr);
 			arr[3] = getNextRandomNumber(arr);
 			arr[4] = getNextRandomNumber(arr);
@@ -147,7 +157,7 @@ public class MyLotto2 {
 	static boolean checkExistAll(String str){
 		for (Map data: dataList) {
 			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
-			if (dataStr.indexOf(str) > 0){
+			if (dataStr.indexOf(StringUtils.replaceAll(str, " ", "")) > 0){
 				System.out.println("exists===>"+dataStr);
 				return true;
 			}
@@ -185,10 +195,22 @@ public class MyLotto2 {
 	static void checkExistAllList(String str){
 		for (Map data: dataList) {
 			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
-			if (dataStr.indexOf(str) > 0){
+			if (dataStr.indexOf(StringUtils.replaceAll(str, " ", "")) > 0){
 				System.out.println(str + " exists===>"+MapUtils.getString(data, "회차") + "회차:" + dataStr);
 			}
 		}
+	}
+	
+	static void checkExistPer3(String allNo) {
+		String[] allNos = StringUtils.split(allNo, ",");
+		String step1 = StringUtils.replaceAll("," + allNos[0] + "," + allNos[1] + "," + allNos[2] + ",", " ","");
+		checkExistAllList(step1);
+		String step2 = StringUtils.replaceAll("," + allNos[1] + "," + allNos[2] + "," + allNos[3] + ",", " ","");
+		checkExistAllList(step2);
+		String step3 = StringUtils.replaceAll("," + allNos[2] + "," + allNos[3] + "," + allNos[4] + ",", " ","");
+		checkExistAllList(step3);
+		String step4 = StringUtils.replaceAll("," + allNos[3] + "," + allNos[4] + "," + allNos[5] + ",", " ","");
+		checkExistAllList(step4);
 	}
 	
 	static String checkSame(int no1, int no2, int no3, int no4, int no5, int no6, int checkCnt) {
