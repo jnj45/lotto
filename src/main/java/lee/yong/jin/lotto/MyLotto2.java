@@ -24,8 +24,8 @@ public class MyLotto2 {
 	
 	public static void main(String[] args) {
 		dataList = loadExcel();
-//		System.out.println("1=========================================================================");
-//		genNumber();
+		System.out.println("1=========================================================================");
+		genNumber();
 //		System.out.println("2=========================================================================");
 //		genNumber();
 //		System.out.println("3=========================================================================");
@@ -47,18 +47,28 @@ public class MyLotto2 {
 
 		
 /*
-[7, 9, 11, 13, 20, 21]
-[2, 6, 10, 15, 26, 29]
-[5, 6, 7, 14, 25, 31]
-[4, 5, 25, 30, 38, 40]
-[8, 12, 13, 16, 17, 39]
+[7, 13, 23, 37, 38, 41]
+[5, 16, 19, 23, 35, 37]
+[8, 12, 15, 21, 32, 39]
+[1, 9, 11, 19, 32, 36]
+[5, 18, 19, 21, 36, 41]
+
+[6, 8, 10, 19, 36, 38]
+[9, 17, 24, 26, 33, 44]
+[9, 13, 14, 15, 28, 42]
+[1, 2, 14, 31, 39, 41]
+[4, 15, 24, 33, 34, 44] 
  */
 		
-		checkExistPer3("7, 9, 11, 13, 20, 21");
-		checkExistPer3("2, 6, 10, 15, 26, 29");
-		checkExistPer3("5, 6, 7, 14, 25, 31");
-		checkExistPer3("4, 5, 25, 30, 38, 40");
-		checkExistPer3("8, 12, 13, 16, 17, 39");
+//		checkExistPer3("2, 7, 10, 17, 21, 31");
+//		checkExistPer3("2, 12, 17, 24, 31, 39");
+//		checkExistPer3("7, 8, 9, 11, 38, 42");
+//		checkExistPer3("6, 9, 10, 20, 36, 38");
+//		checkExistPer3("3, 18, 26, 29, 31, 33");
+		
+//		isCheckOverSameCnt(1, 2, 3, 4, 5, 6, 3);
+		
+		
 		
 	}
 	
@@ -71,8 +81,8 @@ public class MyLotto2 {
 			
 //			arr[0] = getNextRandomNumber(arr);
 //			arr[1] = getNextRandomNumber(arr);
-			arr[0] = 12;
-			arr[1] = 17;
+			arr[0] = 4;
+			arr[1] = 44;
 			arr[2] = getNextRandomNumber(arr);
 			arr[3] = getNextRandomNumber(arr);
 			arr[4] = getNextRandomNumber(arr);
@@ -115,6 +125,11 @@ public class MyLotto2 {
 				continue;
 			}
 			
+			//중복4개 이상 
+			if (isCheckOverSameCnt(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], 4)) {
+				continue;
+			}
+			
 			isContinue = false;
 		}
 		System.out.println("end!");
@@ -144,16 +159,6 @@ public class MyLotto2 {
 		return false;
 	}
 	
-	static boolean checkExistRecent12(int no1, int no2, int cnt){
-		for(int i=0; i < cnt; i++){
-			Map data = dataList.get(i);
-			if ((no1+","+no2).equals(MapUtils.getIntValue(data, "번호1")+","+MapUtils.getIntValue(data, "번호2"))){
-				return true;
-			}
-		}
-		return false;
-	}
-
 	static boolean checkExistAll(String str){
 		for (Map data: dataList) {
 			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
@@ -164,11 +169,7 @@ public class MyLotto2 {
 		}
 		return false;
 	}
-	//[6, 16, 17, 25, 31, 33]
-	//[4, 5, 7, 21, 26, 39]
-	//[3, 4, 12, 15, 23, 29]
-	//[5, 9, 15, 20, 38, 41]
-	//[2, 25, 31, 35, 39, 41]
+	
 	static boolean checkExist(String str, int maxCheckCnt, int maxExistCnt){
 		int checkedCnt = 0;
 		int existCnt = 0;
@@ -213,8 +214,8 @@ public class MyLotto2 {
 		checkExistAllList(step4);
 	}
 	
-	static String checkSame(int no1, int no2, int no3, int no4, int no5, int no6, int checkCnt) {
-		String result = "";
+	static boolean isCheckOverSameCnt(int no1, int no2, int no3, int no4, int no5, int no6, int checkCnt) {
+		boolean result = false;
 		
 		int existCnt = 0;
 		for (Map data: dataList) {
@@ -225,29 +226,30 @@ public class MyLotto2 {
 			
 			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
 			
-			if (dataStr.indexOf(","+no1+",") > 0){
+			if (dataStr.indexOf(","+no1+",") > -1){
 				existCnt++;
 			}
-			if (dataStr.indexOf(","+no2+",") > 0){
+			if (dataStr.indexOf(","+no2+",") > -1){
 				existCnt++;
 			}
-			if (dataStr.indexOf(","+no3+",") > 0){
+			if (dataStr.indexOf(","+no3+",") > -1){
 				existCnt++;
 			}
-			if (dataStr.indexOf(","+no4+",") > 0){
+			if (dataStr.indexOf(","+no4+",") > -1){
 				existCnt++;
 			}
-			if (dataStr.indexOf(","+no5+",") > 0){
+			if (dataStr.indexOf(","+no5+",") > -1){
 				existCnt++;
 			}
-			if (dataStr.indexOf(","+no6+",") > 0){
+			if (dataStr.indexOf(","+no6+",") > -1){
 				existCnt++;
 			}
 			//System.out.println(dataStr + " : 중복개수" + existCnt);
 			if (existCnt>=checkCnt) {
-				result += "\r\n체크번호=["+no1+","+no2+","+no3+","+no4+","+no5+","+no6+"]"
-						+ "중복회차="+MapUtils.getString(data, "회차") + ", 중복번호=" + MapUtils.getString(data, "번호들");
-				
+				System.out.println("\r\n체크번호=["+no1+","+no2+","+no3+","+no4+","+no5+","+no6+"]"
+						+ "중복회차="+MapUtils.getString(data, "회차") + ", 중복수: "+existCnt+",중복번호=" + MapUtils.getString(data, "번호들"));
+				result = true;
+				break;
 			}
 			existCnt = 0;
 		}
@@ -287,7 +289,7 @@ public class MyLotto2 {
 			//System.out.println(dataStr + " : 중복개수" + existCnt);
 			if (existCnt>=3) {
 				result += "\r\n체크번호=["+no1+","+no2+","+no3+","+no4+","+no5+","+no6+"]"
-						+ "중복회차="+MapUtils.getString(data, "회차") + ", 중복번호=" + MapUtils.getString(data, "번호들");
+						+ "중복회차="+MapUtils.getString(data, "회차") + ", 중복수: "+existCnt+",중복번호=" + MapUtils.getString(data, "번호들");
 				
 			}
 			existCnt = 0;
