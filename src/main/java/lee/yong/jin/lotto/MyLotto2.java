@@ -34,41 +34,15 @@ public class MyLotto2 {
 //		genNumber();
 //		System.out.println("5=========================================================================");
 //		genNumber();
-		
-		
-//		checkExistAllList("7, 9, 11,");
-//		checkExistAllList("12,13,16");
-//		checkExistAllList("13,16,17");
-//		checkExistAllList("16,17,39");
-		
-//		checkExistAllList("1,8,13,36"); //1,8,13,36,44,45
-//		checkExistAllList("8,13,36,44"); //10,12,18,35,42,43
-//		checkExistAllList("13,36,44,45"); //10,12,18,35,42,43
-
-		
+			
 /*
-[7, 13, 23, 37, 38, 41]
-[5, 16, 19, 23, 35, 37]
-[8, 12, 15, 21, 32, 39]
-[1, 9, 11, 19, 32, 36]
-[5, 18, 19, 21, 36, 41]
-
-[6, 8, 10, 19, 36, 38]
-[9, 17, 24, 26, 33, 44]
-[9, 13, 14, 15, 28, 42]
-[1, 2, 14, 31, 39, 41]
-[4, 15, 24, 33, 34, 44] 
+[3, 18, 27, 36, 38, 42]
+[1, 13, 18, 22, 29, 43]
+[4, 8, 24, 28, 31, 37]
+[2, 6, 20, 29, 32, 41]
+[2, 9, 19, 20, 38, 44]
  */
-		
-//		checkExistPer3("2, 7, 10, 17, 21, 31");
-//		checkExistPer3("2, 12, 17, 24, 31, 39");
-//		checkExistPer3("7, 8, 9, 11, 38, 42");
-//		checkExistPer3("6, 9, 10, 20, 36, 38");
-//		checkExistPer3("3, 18, 26, 29, 31, 33");
-		
-//		isCheckOverSameCnt(1, 2, 3, 4, 5, 6, 3);
-		
-		
+	
 		
 	}
 	
@@ -79,10 +53,10 @@ public class MyLotto2 {
 		while(isContinue){
 			int[] arr = new int[6];
 			
-//			arr[0] = getNextRandomNumber(arr);
-//			arr[1] = getNextRandomNumber(arr);
-			arr[0] = 4;
-			arr[1] = 44;
+			arr[0] = getNextRandomNumber(arr);
+			arr[1] = getNextRandomNumber(arr);
+//			arr[0] = 4;
+//			arr[1] = 44;
 			arr[2] = getNextRandomNumber(arr);
 			arr[3] = getNextRandomNumber(arr);
 			arr[4] = getNextRandomNumber(arr);
