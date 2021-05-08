@@ -35,12 +35,14 @@ public class MyLotto2 {
 //		System.out.println("5=========================================================================");
 //		genNumber();
 			
+		//checkExistAll("31,33,42");//11,20,29,31,33,42
 /*
-[3, 18, 27, 36, 38, 42]
-[1, 13, 18, 22, 29, 43]
-[4, 8, 24, 28, 31, 37]
-[2, 6, 20, 29, 32, 41]
-[2, 9, 19, 20, 38, 44]
+[5, 14, 16, 27, 33, 37]
+[5, 11, 17, 23, 33, 34]
+[7, 10, 12, 25, 34, 37]
+[2, 12, 25, 40, 43, 44]
+[6, 14, 23, 34, 36, 43]
+
  */
 	
 		
@@ -65,7 +67,7 @@ public class MyLotto2 {
 			Arrays.parallelSort(arr);
 			System.out.println(Arrays.toString(arr));
 			
-			int maxCheckCnt = 54;
+			int maxCheckCnt = 900;
 			int maxExistCnt = 1;
 			
 			if (checkExist(arr[0]+","+arr[1]+","+arr[2],maxCheckCnt,maxExistCnt)) {
@@ -137,7 +139,7 @@ public class MyLotto2 {
 		for (Map data: dataList) {
 			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
 			if (dataStr.indexOf(StringUtils.replaceAll(str, " ", "")) > 0){
-				System.out.println("exists===>"+dataStr);
+				System.out.println("exists===>"+MapUtils.getString(data, "회차")+"회차 : "+dataStr);
 				return true;
 			}
 		}
