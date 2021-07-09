@@ -37,12 +37,11 @@ public class MyLotto2 {
 			
 		//checkExistAll("31,33,42");//11,20,29,31,33,42
 /*
-[5, 14, 16, 27, 33, 37]
-[5, 11, 17, 23, 33, 34]
-[7, 10, 12, 25, 34, 37]
-[2, 12, 25, 40, 43, 44]
-[6, 14, 23, 34, 36, 43]
-
+7, 12, 24, 27, 37, 40
+7, 10, 16, 19, 25, 37
+5, 6, 16, 28, 41, 42
+4, 8, 12, 22, 28, 37
+8, 9, 14, 21, 39, 40
  */
 	
 		
@@ -65,23 +64,35 @@ public class MyLotto2 {
 			arr[5] = getNextRandomNumber(arr);
 			
 			Arrays.parallelSort(arr);
-			System.out.println(Arrays.toString(arr));
+			System.out.println("================================");
+			System.out.println("랜덤번호: "+Arrays.toString(arr));
 			
-			int maxCheckCnt = 900;
-			int maxExistCnt = 1;
+			int MAX_CHECK_CNT = 108;
+			int MAX_EXIST_CNT = 1;
 			
+			int maxCheckCnt = MAX_CHECK_CNT;
+			int maxExistCnt = MAX_EXIST_CNT;
 			if (checkExist(arr[0]+","+arr[1]+","+arr[2],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[0]+","+arr[1]+","+arr[2]+" exsit");
 				continue;
 			}
+			
+			maxCheckCnt = MAX_CHECK_CNT;
+			maxExistCnt = MAX_EXIST_CNT;
 			if (checkExist(arr[1]+","+arr[2]+","+arr[3],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[1]+","+arr[2]+","+arr[3]+" exsit");
 				continue;
 			}
+			
+			maxCheckCnt = MAX_CHECK_CNT;
+			maxExistCnt = MAX_EXIST_CNT;
 			if (checkExist(arr[2]+","+arr[3]+","+arr[4],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[2]+","+arr[3]+","+arr[4]+" exsit");
 				continue;
 			}
+			
+			maxCheckCnt = MAX_CHECK_CNT;
+			maxExistCnt = MAX_EXIST_CNT;
 			if (checkExist(arr[3]+","+arr[4]+","+arr[5],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[3]+","+arr[4]+","+arr[5]+" exsit");
 				continue;
@@ -102,13 +113,14 @@ public class MyLotto2 {
 			}
 			
 			//중복4개 이상 
-			if (isCheckOverSameCnt(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], 4)) {
-				continue;
-			}
+//			if (isCheckOverSameCnt(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], 4)) {
+//				continue;
+//			}
 			
 			isContinue = false;
 		}
-		System.out.println("end!");
+		System.out.println("all pass!");
+		System.out.println("================================");
 	}
 	
 	static int getNextRandomNumber(int[] arr) {
@@ -147,26 +159,35 @@ public class MyLotto2 {
 	}
 	
 	static boolean checkExist(String str, int maxCheckCnt, int maxExistCnt){
+		System.out.println("checking nums = " + str);
+		
 		int checkedCnt = 0;
 		int existCnt = 0;
 		
 		for (Map data: dataList) {
 			checkedCnt++;
-			String dataStr = ","+MapUtils.getString(data, "번호들")+",";
-			if (dataStr.indexOf(str) > 0){
-				existCnt++;
-				if (checkedCnt < maxCheckCnt) {
-					System.out.println("checkdCnt["+checkedCnt+"] exists===>"+dataStr);
-					return true;
-				}else {
-					if (existCnt > maxExistCnt) {
-						System.out.println("existCnt["+existCnt+"] exists===>"+dataStr);
-						return true;
-					}
+			//체크 회차 초과
+			if (checkedCnt > maxCheckCnt) {
+				System.out.println("maxCheckCnt over = " + checkedCnt);
+				break;
+			}
+			//체크 회차 이내
+			else {
+				String dataStr = ","+MapUtils.getString(data, "번호들")+",";
+				if (dataStr.indexOf(str) > 0){
+					existCnt++;
 				}
 			}
 		}
-		return false;
+		
+		//존재횟수 체크
+		if (existCnt <= maxExistCnt) {
+			System.out.println("existCnt = " + existCnt);
+			return false;
+		}else {
+			System.out.println("existCnt over = " + existCnt);
+			return true;
+		}
 	}
 	
 	static void checkExistAllList(String str){
