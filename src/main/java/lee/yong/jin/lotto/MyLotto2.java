@@ -10,9 +10,7 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.util.StringUtil;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -37,19 +35,15 @@ public class MyLotto2 {
 			
 		//checkExistAll("31,33,42");//11,20,29,31,33,42
 /*
-7, 12, 24, 27, 37, 40
-7, 10, 16, 19, 25, 37
-5, 6, 16, 28, 41, 42
-4, 8, 12, 22, 28, 37
-8, 9, 14, 21, 39, 40
+
  */
-	
 		
 	}
 	
+	static int existCheckedCnt = 0;
+	
 	static void genNumber() {
 		boolean isContinue = true;
-		
 				
 		while(isContinue){
 			int[] arr = new int[6];
@@ -67,11 +61,13 @@ public class MyLotto2 {
 			System.out.println("================================");
 			System.out.println("랜덤번호: "+Arrays.toString(arr));
 			
-			int MAX_CHECK_CNT = 108;
+			int MAX_CHECK_CNT = 1000;
 			int MAX_EXIST_CNT = 1;
 			
 			int maxCheckCnt = MAX_CHECK_CNT;
 			int maxExistCnt = MAX_EXIST_CNT;
+			existCheckedCnt = 0;
+			
 			if (checkExist(arr[0]+","+arr[1]+","+arr[2],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[0]+","+arr[1]+","+arr[2]+" exsit");
 				continue;
@@ -109,6 +105,11 @@ public class MyLotto2 {
 			}
 			if (checkExistAll(arr[2]+","+arr[3]+","+arr[4]+","+arr[5])) {
 				System.out.println(arr[2]+","+arr[3]+","+arr[4]+","+arr[5]+" exist");
+				continue;
+			}
+			
+			if (existCheckedCnt > 1) {
+				System.out.println("3숫자단위 존재여부 횟수:" + existCheckedCnt);
 				continue;
 			}
 			
@@ -179,14 +180,17 @@ public class MyLotto2 {
 				}
 			}
 		}
-		
+		System.out.println("checkedCnt = " + checkedCnt);
 		//존재횟수 체크
-		if (existCnt <= maxExistCnt) {
-			System.out.println("existCnt = " + existCnt);
-			return false;
-		}else {
+		if (existCnt > maxExistCnt) {
 			System.out.println("existCnt over = " + existCnt);
 			return true;
+		}else {
+			System.out.println("existCnt " + existCnt);
+			if (existCnt > 0) {
+				existCheckedCnt++;
+			}
+			return false;
 		}
 	}
 	
