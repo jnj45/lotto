@@ -35,7 +35,11 @@ public class MyLotto2 {
 			
 		//checkExistAll("31,33,42");//11,20,29,31,33,42
 /*
-
+17, 24, 25, 26, 34, 37
+5, 23, 32, 33, 36, 41
+6, 9, 14, 21, 27, 42
+4, 7, 13, 23, 29, 35
+5, 14, 16, 32, 35, 42
  */
 		
 	}
@@ -50,8 +54,6 @@ public class MyLotto2 {
 			
 			arr[0] = getNextRandomNumber(arr);
 			arr[1] = getNextRandomNumber(arr);
-//			arr[0] = 4;
-//			arr[1] = 44;
 			arr[2] = getNextRandomNumber(arr);
 			arr[3] = getNextRandomNumber(arr);
 			arr[4] = getNextRandomNumber(arr);
