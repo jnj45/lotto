@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -33,13 +34,13 @@ public class MyLotto2 {
 //		System.out.println("5=========================================================================");
 //		genNumber();
 			
-		//checkExistAll("31,33,42");//11,20,29,31,33,42
+//		System.out.println(checkExistAll("25,34,36"));//11,20,29,31,33,42
 /*
-17, 24, 25, 26, 34, 37
-5, 23, 32, 33, 36, 41
-6, 9, 14, 21, 27, 42
-4, 7, 13, 23, 29, 35
-5, 14, 16, 32, 35, 42
+10, 12, 29, 38, 42, 43
+4, 12, 20, 22, 39, 42
+13, 21, 23, 27, 41, 42
+7, 8, 10, 12, 34, 38
+2, 5, 15, 17, 29, 40
  */
 		
 	}
@@ -115,10 +116,13 @@ public class MyLotto2 {
 				continue;
 			}
 			
-			//중복4개 이상 
-//			if (isCheckOverSameCnt(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], 4)) {
-//				continue;
-//			}
+			//최근 2회차 번호에서 중복 숫자 2개 이상인지?
+			if (isOver2Same(arr, (int[])dataList.get(0).get("nos"))) {
+				continue;
+			}
+			if (isOver2Same(arr, (int[])dataList.get(1).get("nos"))) {
+				continue;
+			}
 			
 			isContinue = false;
 		}
@@ -126,6 +130,20 @@ public class MyLotto2 {
 		System.out.println("================================");
 	}
 	
+	static boolean isOver2Same(int[] src, int[] target) {
+		int sameCnt = 0;
+		for (int i : src) {
+			if (ArrayUtils.contains(target, i)) {
+				sameCnt++;
+			}
+		}
+		System.out.println("src="+Arrays.toString(src)+",target="+Arrays.toString(target)+",중복 숫자 개수="+sameCnt);
+		if (sameCnt > 2) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	static int getNextRandomNumber(int[] arr) {
 		int result = 0;
 		while(true) {
@@ -321,13 +339,22 @@ public class MyLotto2 {
 				XSSFRow row=sheet.getRow(rowindex);
 				if(row !=null){
 					Map data = new HashMap();
+					int[] nos = {(int)row.getCell(13).getNumericCellValue(),
+								 (int)row.getCell(14).getNumericCellValue(),
+								 (int)row.getCell(15).getNumericCellValue(),
+								 (int)row.getCell(16).getNumericCellValue(),
+								 (int)row.getCell(17).getNumericCellValue(),
+								 (int)row.getCell(18).getNumericCellValue()
+								 };
+					
 					data.put("회차",  (int)row.getCell(1).getNumericCellValue());
-					data.put("번호1", (int)row.getCell(13).getNumericCellValue());
-					data.put("번호2", (int)row.getCell(14).getNumericCellValue());
-					data.put("번호3", (int)row.getCell(15).getNumericCellValue());
-					data.put("번호4", (int)row.getCell(16).getNumericCellValue());
-					data.put("번호5", (int)row.getCell(17).getNumericCellValue());
-					data.put("번호6", (int)row.getCell(18).getNumericCellValue());
+					data.put("nos", nos);
+					data.put("번호1", nos[0]);
+					data.put("번호2", nos[1]);
+					data.put("번호3", nos[2]);
+					data.put("번호4", nos[3]);
+					data.put("번호5", nos[4]);
+					data.put("번호6", nos[5]);
 
 					data.put("번호들",   MapUtils.getIntValue(data, "번호1") + "," +
 										MapUtils.getIntValue(data, "번호2") + "," +
