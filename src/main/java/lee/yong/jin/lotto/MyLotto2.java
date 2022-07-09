@@ -36,12 +36,12 @@ public class MyLotto2 {
 			
 //		System.out.println(checkExistAll("25,34,36"));//11,20,29,31,33,42
 /*
-10, 12, 29, 38, 42, 43
-4, 12, 20, 22, 39, 42
-13, 21, 23, 27, 41, 42
-7, 8, 10, 12, 34, 38
-2, 5, 15, 17, 29, 40
+1, 3, 11, 19, 28, 30
+8, 14, 26, 32, 37, 41
+5, 7, 10, 15, 27, 35
+10, 25, 27, 29, 32, 35
  */
+		
 		
 	}
 	
@@ -64,54 +64,48 @@ public class MyLotto2 {
 			System.out.println("================================");
 			System.out.println("랜덤번호: "+Arrays.toString(arr));
 			
-			int MAX_CHECK_CNT = 1000;
-			int MAX_EXIST_CNT = 1;
-			
-			int maxCheckCnt = MAX_CHECK_CNT;
-			int maxExistCnt = MAX_EXIST_CNT;
+			final int maxCheckCnt = 2000;
+			final int maxExistCnt = 2;
 			existCheckedCnt = 0;
 			
 			if (checkExist(arr[0]+","+arr[1]+","+arr[2],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[0]+","+arr[1]+","+arr[2]+" exsit");
+				existCheckedCnt++;
 				continue;
 			}
 			
-			maxCheckCnt = MAX_CHECK_CNT;
-			maxExistCnt = MAX_EXIST_CNT;
 			if (checkExist(arr[1]+","+arr[2]+","+arr[3],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[1]+","+arr[2]+","+arr[3]+" exsit");
+				existCheckedCnt++;
 				continue;
 			}
 			
-			maxCheckCnt = MAX_CHECK_CNT;
-			maxExistCnt = MAX_EXIST_CNT;
 			if (checkExist(arr[2]+","+arr[3]+","+arr[4],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[2]+","+arr[3]+","+arr[4]+" exsit");
+				existCheckedCnt++;
 				continue;
 			}
 			
-			maxCheckCnt = MAX_CHECK_CNT;
-			maxExistCnt = MAX_EXIST_CNT;
 			if (checkExist(arr[3]+","+arr[4]+","+arr[5],maxCheckCnt,maxExistCnt)) {
 				System.out.println(arr[3]+","+arr[4]+","+arr[5]+" exsit");
+				existCheckedCnt++;
 				continue;
 			}
-			
 						
-			if (checkExistAll(arr[0]+","+arr[1]+","+arr[2]+","+arr[3])) {
-				System.out.println(arr[0]+","+arr[1]+","+arr[2]+","+arr[3]+" exist");
-				continue;
-			}
-			if (checkExistAll(arr[1]+","+arr[2]+","+arr[3]+","+arr[4])) {
-				System.out.println(arr[1]+","+arr[2]+","+arr[3]+","+arr[4]+" exist");
-				continue;
-			}
-			if (checkExistAll(arr[2]+","+arr[3]+","+arr[4]+","+arr[5])) {
-				System.out.println(arr[2]+","+arr[3]+","+arr[4]+","+arr[5]+" exist");
-				continue;
-			}
+//			if (checkExistAll(arr[0]+","+arr[1]+","+arr[2]+","+arr[3])) {
+//				System.out.println(arr[0]+","+arr[1]+","+arr[2]+","+arr[3]+" exist");
+//				continue;
+//			}
+//			if (checkExistAll(arr[1]+","+arr[2]+","+arr[3]+","+arr[4])) {
+//				System.out.println(arr[1]+","+arr[2]+","+arr[3]+","+arr[4]+" exist");
+//				continue;
+//			}
+//			if (checkExistAll(arr[2]+","+arr[3]+","+arr[4]+","+arr[5])) {
+//				System.out.println(arr[2]+","+arr[3]+","+arr[4]+","+arr[5]+" exist");
+//				continue;
+//			}
 			
-			if (existCheckedCnt > 1) {
+			if (existCheckedCnt >= 2) {
 				System.out.println("3숫자단위 존재여부 횟수:" + existCheckedCnt);
 				continue;
 			}
@@ -138,7 +132,7 @@ public class MyLotto2 {
 			}
 		}
 		System.out.println("src="+Arrays.toString(src)+",target="+Arrays.toString(target)+",중복 숫자 개수="+sameCnt);
-		if (sameCnt > 2) {
+		if (sameCnt >= 2) {
 			return true;
 		}else {
 			return false;
